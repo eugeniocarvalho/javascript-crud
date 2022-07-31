@@ -16,6 +16,7 @@
 .botao-simples {
     border: none;
     background-color: unset;
+    cursor: pointer;
 }
 
 .botao-simples--adicionar {
