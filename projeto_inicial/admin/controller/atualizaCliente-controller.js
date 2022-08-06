@@ -1,24 +1,22 @@
 import { clienteService } from "../service/cliente-service.js";
 
-const pegaURL = new URL(window.location);
-const id = pegaURL.searchParams.get("id");
+(async () => {
+  const pegaURL = new URL(window.location);
+  const id = pegaURL.searchParams.get("id");
+  const inputNome = document.querySelector("[data-nome]");
+  const inputEmail = document.querySelector("[data-email]");
+  const dados = await clienteService.detalhaCliente(id);
+  const formulario = document.querySelector("[data-form]");
 
-const inputNome = document.querySelector("[data-nome]");
-const inputEmail = document.querySelector("[data-email]");
+  inputNome.value = dados.nome;
+  inputEmail.value = dados.email;
 
-clienteService.detalhaCliente(id)
-  .then( dados => {
-    inputNome.value = dados.nome;
-    inputEmail.value = dados.email;
-  });
+  formulario.addEventListener("submit", async (evento) => {
+    evento.preventDefault();
 
-const formulario = document.querySelector("[data-form]");
+    await clienteService.atualizaCliente(id, inputNome.value, inputEmail.value);
 
-formulario.addEventListener("submit", (evento) => {
-  evento.preventDefault();
-
-  clienteService.atualizaCliente(id, inputNome.value, inputEmail.value)
-  .then(() => {
     window.location.href = "../telas/edicao_concluida.html";
   });
-});
+})()
+
