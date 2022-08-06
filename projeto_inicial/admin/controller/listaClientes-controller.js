@@ -25,20 +25,32 @@ tabela.addEventListener("click", async (evento) => {
   let botaoDeletar = evento.target.className === "botao-simples botao-simples--excluir";
 
   if (botaoDeletar) {
-    const linhaCliente = evento.target.closest("[data-id]");
-    let id = linhaCliente.dataset.id;
+    try {
+      const linhaCliente = evento.target.closest("[data-id]");
+      let id = linhaCliente.dataset.id;
 
-    await clienteService.removeCliente(id);
+      await clienteService.removeCliente(id);
 
-    linhaCliente.remove();
+      linhaCliente.remove();
+    }
+    catch (erro) {
+      console.log(erro);
+      window.location.href = "../telas/erro.html";
+    }
   }
 });
 
 const render = async () => {
-  const listClientes = await clienteService.listaClientes();
-  listClientes.forEach(cliente => {
-    tabela.appendChild(criaNovaLinha(cliente.nome, cliente.email, cliente.id));
-  });
+  try {
+    const listClientes = await clienteService.listaClientes();
+    listClientes.forEach(cliente => {
+      tabela.appendChild(criaNovaLinha(cliente.nome, cliente.email, cliente.id));
+    });
+  }
+  catch (erro) {
+    console.log(erro);
+    window.location.href = "../telas/erro.html";
+  }
 }
 
 render();
